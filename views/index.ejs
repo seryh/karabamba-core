@@ -1,0 +1,114 @@
+<!doctype html>
+<html ng-app="karabamba" id="ng-app">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+        <link href="/public/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/public/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+
+        <link rel='stylesheet' type='text/css' href='/public/css/style.css?v={version}'/>
+
+        <script type="text/javascript" src="/public/js/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="/public/bower_components/underscore/underscore-min.js"></script>
+        <script type="text/javascript" src="/public/bower_components/moment/min/moment.min.js"></script>
+
+        <script type="text/javascript" src="/public/bower_components/angular/angular.min.js"></script>
+        <script type="text/javascript" src="/public/bower_components/angular/i18n/angular-locale_ru-ru.js"></script>
+        <script type="text/javascript" src="/public/bower_components/angular-cookies/angular-cookies.min.js"></script>
+
+
+        <script type="text/javascript" src="/public/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+
+        <script type="text/javascript" src="http://<%= wsHost %>/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+            var socket = null;
+            if (typeof io != 'undefined') {
+                socket = io.connect('http://<%= wsHost %>');
+            }
+        </script>
+</head>
+<body role="document" ng-controller="globalController">
+<script type="text/ng-template" id="modal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Alert!</h3>
+    </div>
+    <div class="modal-body">
+        {{content}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="navbarController">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">karabamba</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><div style="color: #fff;padding-top: 16px;">Пользователей онлайн – {{onlineCount}}</div></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container theme-showcase" role="main" ng-controller="mainController" style="padding-top: 60px;">
+
+    <div style="clear: both;"></div>
+    <div class="page-header">
+        <h2>Example</h2>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-8" style="margin-top: -20px;width: 820px;">
+        <script type="text/ng-template" id="/spending-template-datepicker.html">
+            <table class="table spending-table">
+                <thead>
+                <tr>
+                    <th ng-click="sortByNum('CarName')" style="width: 100px;">Авто</th>
+                    <th ng-click="sortByNum('Speed')" style="width: 300px;">Скорость</th>
+                    <th ng-click="sortByName('CityName')"  style="width: 300px;">Город</th>
+                    <th ng-click="sortByNum('Time')">Время</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in spendingDatepickerList"
+                    ng-class="item.Speed > 160 ? 'danger' : 'warning'">
+                    <td><nobr>{{item.CarName}}</nobr></td>
+                    <td>{{item.Speed}} Км/ч</td>
+                    <td>{{item.CityName}}</td>
+                    <td>
+                        <nobr>{{item.TimeGMT | date:'dd.MM.yyyy HH:mm Z'}}</nobr>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </script>
+        <spending-datepicker-list>[{"Time":1412059293,"CarID":"ARN85272","CarName":"SKODA Octavia Р235НК123","CityName":"Санкт-Петербург","CityID":14,"TrackerID":3314,"Lat":60.076072,"Lon":30.38082,"Course":171.3,"Speed":130,"Date":"2014-09-29T17:00:00.000Z","TimeUTC":"2014-09-30T06:41:33.000Z","TimeGMT":"2014-09-30T13:41:33+07:00"}]</spending-datepicker-list>
+
+        <div>
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+        </div>
+    </div>
+
+    <div style="clear: both;"></div>
+
+
+
+</div> <!-- /container -->
+
+
+
+<script src="/public/angular_controllers/global.js"></script>
+<script src="/public/angular_controllers/navbar.js"></script>
+<script src="/public/angular_controllers/main.js"></script>
+
+</body>
+</html>

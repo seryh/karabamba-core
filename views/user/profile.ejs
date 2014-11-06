@@ -1,0 +1,87 @@
+<!doctype html>
+<html ng-app="karabamba" id="ng-app">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+    <link href="/public/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <link rel='stylesheet' type='text/css' href='/public/css/style.css?v={version}'/>
+
+    <script type="text/javascript" src="/public/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/public/bower_components/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="/public/bower_components/moment/min/moment.min.js"></script>
+
+    <script type="text/javascript" src="/public/bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/public/bower_components/angular/i18n/angular-locale_ru-ru.js"></script>
+    <script type="text/javascript" src="/public/bower_components/angular-cookies/angular-cookies.min.js"></script>
+
+
+    <script type="text/javascript" src="/public/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+
+    <script type="text/javascript" src="http://<%= wsHost %>/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = null;
+        if (typeof io != 'undefined') {
+            socket = io.connect('http://<%= wsHost %>');
+        }
+    </script>
+</head>
+<body role="document" ng-controller="globalController">
+<script type="text/ng-template" id="modal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Alert!</h3>
+    </div>
+    <div class="modal-body">
+        {{content}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="navbarController">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">karabamba</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><div style="color: #fff;padding-top: 16px;">Пользователей онлайн – {{onlineCount}}</div></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container theme-showcase" role="main" ng-controller="profileController" style="padding-top: 60px;">
+
+
+    <div style="clear: both;"></div>
+    <div class="page-header">
+        <h2>User profile</h2>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-8" style="margin-top: -20px;width: 820px;">
+
+    </div>
+
+    <div style="clear: both;"></div>
+
+
+
+</div> <!-- /container -->
+
+
+
+<script src="/public/angular_controllers/global.js"></script>
+<script src="/public/angular_controllers/navbar.js"></script>
+<script src="/public/angular_controllers/profile.js"></script>
+
+</body>
+</html>

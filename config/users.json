@@ -1,0 +1,12 @@
+{
+	"admin":{
+        "login" : "admin",
+        "password" : "admin",
+        "name" : "admin",
+        "group" : "admin"},
+	"demo":{
+        "login" : "demo",
+        "password" : "demo",
+        "name" : "demo user",
+        "group" : "demo"}
+}

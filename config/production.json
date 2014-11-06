@@ -1,0 +1,10 @@
+{
+  "port":8001,
+  "wsPort":4040,
+  "mongo": {
+    "db": "karabamba",
+    "host": "127.0.0.1",
+    "username": "karabamba",
+    "password": "karapass"
+  }
+}

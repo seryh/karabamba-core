@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Authentication</title>
+	<link rel='stylesheet' type='text/css' href='/public/css/style.css'/>
+    <script src="/public/js/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+	<form action="/auth/login" method="POST" id="auth-form" class="auto" style="width: 300px; margin-top: 80px; text-align:center;">
+		<div class="box">
+			<h1>Авторизация</h1>
+		    <div class="item">
+		    	<input type="text" required data-required-msg="Логин не может быть пустым" class="k-textbox" name="login" 
+		    		placeholder="Логин" maxlength="20" />
+		    </div>
+		    <div class="item">
+		    	<input type="password" required data-required-msg="Пароль не может быть пустым" class="k-textbox" name="password" 
+		    		placeholder="Пароль" maxlength="20" />
+		    </div>
+		    <button class="k-button" type="submit">Войти</button>	
+		    <div class="item"></div>
+		</div>
+	</form>
+</body>
+</html>

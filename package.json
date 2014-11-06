@@ -1,0 +1,24 @@
+{
+    "name": "karabamba",
+    "description": "",
+    "version": "1.0.0",
+    "author": "Seryh",
+    "scripts": { 
+        "start": "NODE_ENV=production forever start app.js",
+        "test": "NODE_ENV=development forever start app.js"
+    },
+    "dependencies": {
+        "socket.io":"1.2.0",
+        "extend":"2.0.0",
+        "ejs":"0.8.4",
+        "express":"3.2.6",
+        "moment":"2.8.3",
+        "express-load":"1.1.7",
+        "connect-mongo" : "0.3.2",
+        "mongoose" : "3.8.18",
+        "jsonschema": "0.4.0",
+        "async": "0.9.0",
+        "underscore": "1.7.0",
+        "acl": "0.4.4"
+    }
+}
