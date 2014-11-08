@@ -69,6 +69,11 @@ var wsUser = function(data) {
                     cb(err, null);
                     return false;
                 }
+                if (!Boolean(docs[0].session)) {
+                    console.log('wsObserver initSession error, session undefined::',docs);
+                    cb('wsObserver initSession error, session undefined', null);
+                    return false;
+                }
 
                 self.setSession( JSON.parse(docs[0].session) );
                 cb(null, {session : self.getSession(), sessionID : sessionID});

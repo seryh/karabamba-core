@@ -7,7 +7,8 @@ module.exports.index = function(data) {
 
     var urlObj =  url.parse(data.req.protocol + "://" +data.req.get('host')) ;
 
-    //data.req.socket сокет (с сессией) доступен и в екшенах
+    //data.req.ext.socket сокет (с сессией) доступен и в екшенах
+    // (при первом запросе недоступен, так как сессия еще не назначилась к сокету)
 
     data.res.render('index', {
         'title': 'karabamba',

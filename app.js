@@ -4,6 +4,7 @@ var express = require('express'),
     app = express(),
     extend = require('extend'),
     util = require('util'),
+    acl = require('acl'),
     MongoStore = require('connect-mongo')(express),
     mongoose = require('mongoose'),
     libs = {
@@ -65,6 +66,7 @@ function mongoAuth(user, pass, onConnect) {
 function appWithHandleErrors() {
 
     libs.wsObserver = require(appInfo.modulesDir + '/wsObserver.js');
+
     libs.wsObserver.start(extend({}, app.config, {
         onWSUsersChanges : function(wsUsers) { // не уверен что этот кусок кода должен быть тут, но красивого места пока не нашел
             for (var userKey in wsUsers) {
@@ -77,6 +79,12 @@ function appWithHandleErrors() {
             }
         }
     }));
+
+    acl = new acl(new acl.mongodbBackend(mongoose.connection.db, 'acl_'));
+
+    acl.allow(require('./config/acl.json'));
+
+    libs.acl = acl;
 
     app.configure('development', function(){
         app.use('/public', express.static('public'));
@@ -94,12 +102,13 @@ function appWithHandleErrors() {
         app.set('views', __dirname + '/views');
         app.set('appInfo', appInfo);
         app.set('libs', libs);
+
         app.use(function(req, res, next) {
             res.header('Access-Control-Allow-Credentials', true);
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
             res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-            if (0 == req.url.indexOf('/api')) {
+            if (req.url.indexOf('/api') === 0) {
                 req.rawBody = '';
                 req.setEncoding('utf8');
                 req.on('data', function(chunk) {
@@ -127,6 +136,7 @@ function appWithHandleErrors() {
                 maxAge: new Date(Date.now() + 3600000)
             }
         }));
+
         app.use(express.methodOverride());
         app.use(app.router);
 

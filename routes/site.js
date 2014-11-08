@@ -39,7 +39,7 @@ module.exports = function(app, libs, appInfo) {
 				socket = user.socket;
 			}
 		}
-		req.socket = socket;
+		req.ext = {socket: socket};
 		next();
 		/*
 		if (/^\/public/ig.test(req.path) || /^\/auth/ig.test(req.path)) {

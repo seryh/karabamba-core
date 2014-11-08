@@ -5,11 +5,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var sessionsSchema = new Schema({
-    login  :  { type: String }
+var userSchema = new Schema({
+      email      :  { type: String } // email == login
     , password   :  { type: String }
-    , name   :  { type: String }
-    , email  :  { type: String }
+    , roles      :  { type: String }
+    , picFile    :  { type: String } // avatar file path
+    , name       :  { type: String }
 });
 
-module.exports = mongoose.model('users', sessionsSchema);
+module.exports = mongoose.model('users', userSchema);

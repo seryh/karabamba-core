@@ -1,0 +1,14 @@
+[
+  {
+    "roles":["admin"],
+    "allows":[
+      {"resources":"*", "permissions":"*"}
+    ]
+  },
+  {
+    "roles":["user", "guest"],
+    "allows":[
+      {"resources":"*", "permissions":"view"}
+    ]
+  }
+]
