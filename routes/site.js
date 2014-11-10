@@ -32,14 +32,23 @@ module.exports = function(app, libs, appInfo) {
     });
 
 	app.all('*', function(req, res, next) {
-		var socket = null;
-		for (var userKey in process.wsObserver.wsUsers) {
-			var user = process.wsObserver.wsUsers[userKey];
+		var socket = null, // первый попавшийся сокет
+			wsUsers = process.wsObserver.wsUsers,
+			sockets = [];  // все сокеты из сессии
+		for (var userKey in wsUsers) {
+			var user = wsUsers[userKey];
 			if ( user.sessionID === req.sessionID ) {
 				socket = user.socket;
 			}
 		}
-		req.ext = {socket: socket};
+		if (Boolean(socket)) {
+			sockets.push(socket);
+			socket.user.relationsIDs.forEach(function (userKey) {
+				if ( Boolean(wsUsers[userKey]) ) sockets.push(wsUsers[userKey]);
+			});
+		}
+
+		req.ext = {socket: socket, sockets: sockets};
 		next();
 		/*
 		if (/^\/public/ig.test(req.path) || /^\/auth/ig.test(req.path)) {

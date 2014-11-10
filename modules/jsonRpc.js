@@ -126,6 +126,15 @@ var jsonRpc = function() {
             return;
         }
 
+        var sockets = [socket],
+            wsUsers = process.wsObserver.wsUsers;
+        if (Boolean(socket)) {
+
+            socket.user.relationsIDs.forEach(function (userKey) {
+                if ( Boolean(wsUsers[userKey]) ) sockets.push(wsUsers[userKey]);
+            });
+        }
+
         if (typeof rpcReq.length == "number") {
             var parse = function(rpcReq, callback) {
                 _methods[rpcReq.method](rpcReq.params, function(result){
@@ -133,6 +142,7 @@ var jsonRpc = function() {
                 }, {
                     providerType: 'socket',
                     socket: socket,
+                    sockets: sockets,
                     req: null
                 });
             };
@@ -147,6 +157,7 @@ var jsonRpc = function() {
             _methods[rpcReq.method](rpcReq.params, _respond, {
                 providerType: 'socket',
                 socket: socket,
+                sockets: sockets,
                 req: null
             });
         }
@@ -169,13 +180,23 @@ var jsonRpc = function() {
             return;
         }
 
-        var socket = null;
-        for (var userKey in process.wsObserver.wsUsers) {
-            var user = process.wsObserver.wsUsers[userKey];
+
+        var socket = null, // первый попавшийся сокет
+            wsUsers = process.wsObserver.wsUsers,
+            sockets = [];  // все сокеты из сессии
+        for (var userKey in wsUsers) {
+            var user = wsUsers[userKey];
             if ( user.sessionID === req.sessionID ) {
                 socket = user.socket;
             }
         }
+        if (Boolean(socket)) {
+            sockets.push(socket);
+            socket.user.relationsIDs.forEach(function (userKey) {
+                if ( Boolean(wsUsers[userKey]) ) sockets.push(wsUsers[userKey]);
+            });
+        }
+
         if (typeof req.body.length == "number") {
             var parse = function(rpcReq, callback) {
                 _methods[rpcReq.method](rpcReq.params, function(result){
@@ -183,6 +204,7 @@ var jsonRpc = function() {
                 }, {
                     providerType: 'http',
                     socket: socket,
+                    sockets: sockets,
                     req: req
                 });
             };
@@ -197,6 +219,7 @@ var jsonRpc = function() {
             _methods[rpcReq.method](rpcReq.params, _respond, {
                 providerType: 'http',
                 socket: socket,
+                sockets: sockets,
                 req: req
             });
         }

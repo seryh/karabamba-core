@@ -82,8 +82,27 @@ var wsUser = function(data) {
         //console.log('--> initSession::\n',process.wsObserver.wsUsers);
     };
 
+    self.getRelationsSockets = function() {
+        var wsUsers = process.wsObserver.wsUsers,
+            sockets = [];
+        self.relationsIDs.forEach(function (userKey) {
+            if ( Boolean(wsUsers[userKey]) ) sockets.push(wsUsers[userKey]);
+        });
+        return sockets;
+    };
+
+    self._setSessionPrivate = function(newSession) {
+        _session = newSession;
+    };
+
     self.extSession = function(ext) {
         _session = extend({}, _session, ext);
+        sessions._sessionSave(self.sessionID, _session);
+
+        self.getRelationsSockets().forEach(function (socket) {
+            socket._setSessionPrivate(_session);
+        });
+
         return _session;
     };
 
@@ -94,6 +113,11 @@ var wsUser = function(data) {
     self.setSession = function(newSession) {
         //todo: при зименении сессии нужно помнить что могут быть несколько подключений см relationsIDs
         _session = newSession;
+        sessions._sessionSave(self.sessionID, _session);
+
+        self.getRelationsSockets().forEach(function (socket) {
+            socket._setSessionPrivate(_session);
+        });
         return _session;
     };
 
@@ -124,16 +148,7 @@ wsObserver = function () {
         });
 
         socket.on('disconnect', function () {
-
-            sessions.findById(socket.user.sessionID, function (err, sess) {
-                if (!err && Boolean(socket.user.session) && Boolean(sess)) {
-                    sess.session = JSON.stringify(socket.user.session);
-                    sess.save(function (err) {
-                        if (err)
-                            console.log('wsObserver sessions save::', err);
-                    });
-                }
-            });
+            sessions._sessionSave(socket.user.sessionID, socket.user.session);
 
             delete self.wsUsers[socket.id];
             self.options.onWSUsersChanges(self.wsUsers);
