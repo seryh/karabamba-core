@@ -25,6 +25,22 @@ module.exports = function() {
         }
     });
 
+    jsonRpc.reg('getUserInfo', function(params, respond, ext){
+        var session;
+
+        if (ext.req) {
+            session = ext.req.session;
+        } else if (ext.socket) {
+            session = ext.socket.user.getSession();
+        }
+
+        if (session.hasOwnProperty('user') == false) {
+            respond({ result: {user: null} });
+            return false;
+        }
+        respond({ result: {user: session.user} });
+    });
+
     jsonRpc.reg('addToSession', function(params, respond, ext){
         if (ext.socket) {
             extend(ext.socket.user.session, params);

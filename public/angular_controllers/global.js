@@ -81,7 +81,7 @@ app.controller('globalController', function($scope, $cookieStore, $modal, $cooki
     };
 
     $scope.addToSession = function(data) {
-        var query = [{"jsonrpc":"2.0","method":"addToSession","params":data,"id":1}];
+        var query = {"jsonrpc":"2.0","method":"addToSession","params":data,"id":1};
         $.ajax({
             url: '/api',
             data: JSON.stringify(query),
@@ -95,7 +95,7 @@ app.controller('globalController', function($scope, $cookieStore, $modal, $cooki
     };
 
     $scope.getSession = function() {
-        var query = [{"jsonrpc":"2.0","method":"getSession","params":{},"id":1}];
+        var query = {"jsonrpc":"2.0","method":"getSession","params":{},"id":1};
         $.ajax({
             url: '/api',
             data: JSON.stringify(query),
@@ -109,9 +109,25 @@ app.controller('globalController', function($scope, $cookieStore, $modal, $cooki
     };
 
 
-    setTimeout(function() {
-        $scope.getSession();
-    }, 1000);
+    $scope.getUserInfo = function(cb) {
+        var cb = cb || function(){},
+            query = {"jsonrpc":"2.0","method":"getUserInfo","params":{},"id":1};
+        $.ajax({
+            url: '/api',
+            data: JSON.stringify(query),
+            type: 'POST',
+            cache: false,
+            dataType : "json",
+            success: function (response) {
+                cb(response);
+            }
+        });
+    };
+
+
+    //setTimeout(function() {
+    //    $scope.getSession();
+    //}, 1000);
 
 
 });

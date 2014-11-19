@@ -55,6 +55,15 @@
             <ul class="nav navbar-nav">
                 <li><div style="color: #fff;padding-top: 16px;">Пользователей онлайн – {{onlineCount}}</div></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" ng-if="user">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{user.name}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/user">Учетная запись</a></li>
+                        <li><a href="/auth/logout">Выйти</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
